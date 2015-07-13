@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.wearable.view.WatchViewStub;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -17,22 +19,27 @@ import java.util.Random;
 
 public class MainActivity extends Activity {
 
-    private TextView mTextView;
     private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wear_main);
-        final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
-        stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
+        setContentView(R.layout.activity_main);
+        setupGoogleApiClient();
+        Button button = (Button) findViewById(R.id.tweet);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onLayoutInflated(WatchViewStub stub) {
-                mTextView = (TextView) stub.findViewById(R.id.text);
+            public void onClick(View view) {
+                sendMessage(makeInputText());
             }
         });
+    }
 
-        this.mGoogleApiClient = new GoogleApiClient.Builder(this)
+    /**
+     * GoogleApiClient の定義
+     */
+    private void setupGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                     @Override
                     public void onConnected(Bundle connectionHint) {
@@ -51,10 +58,13 @@ public class MainActivity extends Activity {
                 })
                 .addApi(Wearable.API)
                 .build();
-        this.mGoogleApiClient.connect();
-        sendMessage(makeInputText());
+        mGoogleApiClient.connect();
     }
 
+    /**
+     * Handheld側に渡す文字列を生成
+     * @return
+     */
     private String makeInputText(){
         Random rand = new Random();
         int n = rand.nextInt(1000);
@@ -62,6 +72,10 @@ public class MainActivity extends Activity {
         return mInputText;
     }
 
+    /**
+     * Handheld側にmessageを渡す
+     * @param message
+     */
     private void sendMessage(String message) {
         if (message == null) return;
         new AsyncTask<String, Void, String>() {
