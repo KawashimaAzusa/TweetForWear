@@ -10,9 +10,7 @@ import com.google.android.gms.wearable.WearableListenerService;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
-/**
- * Created by hashimotomika on 7/13/15.
- */
+
 public class MessageService extends WearableListenerService {
 
     private Twitter mTwitter;
@@ -30,10 +28,18 @@ public class MessageService extends WearableListenerService {
         tweet(msg);
     }
 
+    /**
+     * messageをToastする（ログ用）
+     * @param message
+     */
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * messageをTweetする
+     * @param message
+     */
     private void tweet(String message) {
         AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>() {
             @Override

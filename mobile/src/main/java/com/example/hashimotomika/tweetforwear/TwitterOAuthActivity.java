@@ -12,9 +12,7 @@ import twitter4j.TwitterException;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 
-/**
- * Created by hashimotomika on 7/13/15.
- */
+
 public class TwitterOAuthActivity extends Activity {
     private String mCallbackURL;
     private Twitter mTwitter;
@@ -37,7 +35,6 @@ public class TwitterOAuthActivity extends Activity {
 
     /**
      * OAuth 認証
-     * @param
      */
     private void startAuthorize() {
         AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
@@ -62,6 +59,10 @@ public class TwitterOAuthActivity extends Activity {
         task.execute();
     }
 
+    /**
+     * このクラスで発行されたintentの処理
+     * @param intent
+     */
     @Override
     public void onNewIntent(Intent intent) {
         if (intent == null
@@ -91,6 +92,10 @@ public class TwitterOAuthActivity extends Activity {
         task.execute(verifier);
     }
 
+    /**
+     * OAuth認証がうまくいったときの処理
+     * @param accessToken
+     */
     private void successOAuth(AccessToken accessToken) {
         TwitterUtils.storeAccessToken(this, accessToken);
         Intent intent = new Intent(this, MainActivity.class);

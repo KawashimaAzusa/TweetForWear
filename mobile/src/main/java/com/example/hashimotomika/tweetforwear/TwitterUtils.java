@@ -7,9 +7,6 @@ import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 
-/**
- * Created by hashimotomika on 7/13/15.
- */
 public class TwitterUtils {
 
     private static final String TOKEN = "token";
