@@ -2,51 +2,36 @@ package com.example.hashimotomika.tweetforwear;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
-
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.auth.AccessToken;
-import twitter4j.auth.RequestToken;
+import android.widget.Toast;
 
 
-public class MainActivity extends Activity {
+public class EditPhoneNumberActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        if (!TwitterUtils.hasAccessToken(this)) {
-            Intent intent = new Intent(this, TwitterOAuthActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
-        String phoneNumber = CallRequest.getPhoneNumber(this);
-        if (phoneNumber != "") {
-            TextView textView = (TextView) findViewById(R.id.show_phone_number);
-            textView.setText(phoneNumber);
-        } else {
-            goEditPhoneNumberClass();
-        }
-
-        findViewById(R.id.go_edit_phone_number).setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_edit_phone_number);
+        Button button = (Button) findViewById(R.id.submit_phone_number);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goEditPhoneNumberClass();
+                Button button = (Button) v;
+                EditText text = (EditText) findViewById(R.id.edit_phone_number);
+                String phoneNumber = text.getText().toString();
+                if (phoneNumber != "") {
+                    setPhoneNumber(phoneNumber);
+                } else {
+                    showMessage("input phone number");
+                }
             }
         });
-
     }
 
     @Override
@@ -71,8 +56,15 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void goEditPhoneNumberClass() {
-        Intent intent = new Intent(this, EditPhoneNumberActivity.class);
+    private void setPhoneNumber(String phoneNumber) {
+        CallRequest.storePhoneNumber(this, phoneNumber);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
+
+    private void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
 }

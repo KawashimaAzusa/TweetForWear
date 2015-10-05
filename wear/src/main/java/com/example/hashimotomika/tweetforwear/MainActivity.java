@@ -1,6 +1,11 @@
 package com.example.hashimotomika.tweetforwear;
 
 import android.app.Activity;
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.wearable.view.WatchViewStub;
@@ -19,14 +24,28 @@ import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
-public class MainActivity extends Activity{
+public class MainActivity extends Activity implements SensorEventListener{
 
     private GoogleApiClient mGoogleApiClient;
     public static int cntTouch;
+
+    private static final int FORCE_THRESHOLD = 0;
+    private static final int TIME_THRESHOLD = 100;
+    private static final int SHAKE_TIMEOUT = 500;
+    private static final int SHAKE_DURATION = 100;
+    private static final int SHAKE_COUNT = 3;
+
+    private SensorManager sensorManager;
+    private float lastX = -1.0f, lastY = -1.0f, lastZ = -1.0f;
+    private int mShakeCount = 0;
+    private long mLastForce;
+    private long mLastShake;
+    private long mLastTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +63,7 @@ public class MainActivity extends Activity{
                     case MotionEvent.ACTION_DOWN:
                         cntTouch++;
                         if (cntTouch == 2) {
-                            sendMessage(makeInputText());
+                            sendMessage("TOUCH: " + makeInputText());
                             cntTouch = 0;
                         }
                         action = "ACTION_DOWN";
@@ -63,6 +82,8 @@ public class MainActivity extends Activity{
                 return false;
             }
         });
+
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
     }
 
@@ -133,5 +154,55 @@ public class MainActivity extends Activity{
             }
         }.execute(message);
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        sensorManager.unregisterListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
+        if (sensors.size() > 0) {
+            Sensor s = sensors.get(0);
+            sensorManager.registerListener(this, s, SensorManager.SENSOR_DELAY_UI);
+        }
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if(event.sensor.getType() != Sensor.TYPE_ACCELEROMETER) {
+            return;
+        }
+        long now = System.currentTimeMillis();
+        if ((now - mLastForce) > SHAKE_TIMEOUT) {
+            mShakeCount = 0;
+        }
+        if ((now - mLastTime) > TIME_THRESHOLD) {
+            long elapsedTime = now - mLastTime;
+            float data_x = event.values[0];
+            float data_y = event.values[1];
+            float data_z = event.values[2];
+            float speed = Math.abs(data_x + data_y + data_z - lastX -lastY - lastZ) / elapsedTime * 10000;
+            Log.d("Speed:", String.valueOf(speed));
+
+            if (speed > FORCE_THRESHOLD) {
+                if ((++mShakeCount >= SHAKE_COUNT) && (now - mLastShake > SHAKE_DURATION)) {
+                    mLastShake = now;
+                    mShakeCount = 0;
+                    sendMessage("SHAKE: " + makeInputText());
+                }
+                mLastForce = now;
+            }
+            lastX = data_x;
+            lastY = data_y;
+            lastZ = data_z;
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
 }

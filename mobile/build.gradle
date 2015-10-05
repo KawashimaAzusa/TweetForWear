@@ -25,4 +25,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.google.android.gms:play-services:7.5.0'
     compile files('/Users/hashimotomika/AndroidStudioProjects/TweetForWear/libraries/twitter4j-core-4.0.3.jar')
+    compile files('/Users/hashimotomika/AndroidStudioProjects/TweetForWear/libraries/twilioclient-android.jar')
 }

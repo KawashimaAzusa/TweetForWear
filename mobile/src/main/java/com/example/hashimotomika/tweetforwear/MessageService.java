@@ -26,6 +26,10 @@ public class MessageService extends WearableListenerService {
         }
         showToast(msg);
         tweet(msg);
+        /*
+        sleep(300000);
+        CallRequest.sendCallRequest(this);
+        */
     }
 
     /**
@@ -58,5 +62,13 @@ public class MessageService extends WearableListenerService {
             }
         };
         task.execute(message);
+    }
+
+    public synchronized void sleep(long msec) {
+        try {
+            wait(msec);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
