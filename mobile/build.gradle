@@ -1,8 +1,9 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "23.0.0 rc2"
+    compileSdkVersion 23
+    buildToolsVersion '23.0.0'
+    useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.example.hashimotomika.tweetforwear"
@@ -22,8 +23,13 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     wearApp project(':wear')
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.google.android.gms:play-services:7.5.0'
     compile files('/Users/hashimotomika/AndroidStudioProjects/TweetForWear/libraries/twitter4j-core-4.0.3.jar')
     compile files('/Users/hashimotomika/AndroidStudioProjects/TweetForWear/libraries/twilioclient-android.jar')
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.google.android.gms:play-services:8.1.0'
+    compile 'com.google.android.gms:play-services-ads:8.1.0'
+    compile 'com.google.android.gms:play-services-identity:8.1.0'
+    compile 'com.google.android.gms:play-services-gcm:8.1.0'
+    compile files('C:/Users/Torumba/AppData/Local/Android/sdk/samples/android-20/wearable/TweetForWear/libraries/twitter4j-core-4.0.3.jar')
+    compile files('C:/Users/Torumba/AppData/Local/Android/sdk/samples/android-20/wearable/TweetForWear/libraries/twilioclient-android.jar')
 }
