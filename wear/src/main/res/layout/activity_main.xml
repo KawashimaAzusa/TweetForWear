@@ -7,13 +7,12 @@
     android:background="#ff5c8cff">
 
 
-    <Button
+    <AnalogClock
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/tweet"
-        android:id="@+id/tweet"
+        android:id="@+id/AnalogClock"
+        android:clickable="true"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:background="#ffff9bbe" />
-
+        android:background="#ffff9bbe"/>
 </RelativeLayout>

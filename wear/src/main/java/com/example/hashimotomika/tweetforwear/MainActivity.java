@@ -1,20 +1,17 @@
 package com.example.hashimotomika.tweetforwear;
 
 import android.app.Activity;
-import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.wearable.view.WatchViewStub;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.view.View.OnTouchListener;
+import android.widget.AnalogClock;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -23,11 +20,8 @@ import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 public class MainActivity extends Activity implements SensorEventListener{
 
@@ -54,8 +48,8 @@ public class MainActivity extends Activity implements SensorEventListener{
         setupGoogleApiClient();
         cntTouch = 0;
 
-        Button button = (Button) findViewById(R.id.tweet);
-        button.setOnTouchListener(new View.OnTouchListener() {
+        AnalogClock analogClock = (AnalogClock) findViewById(R.id.AnalogClock);
+        analogClock.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 String action = "";

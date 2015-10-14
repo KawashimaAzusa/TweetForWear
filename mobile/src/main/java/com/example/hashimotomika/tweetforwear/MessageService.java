@@ -1,6 +1,7 @@
 package com.example.hashimotomika.tweetforwear;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.wearable.MessageEvent;
@@ -14,6 +15,7 @@ import twitter4j.TwitterException;
 public class MessageService extends WearableListenerService {
 
     private Twitter mTwitter;
+    private String TAG = "Handler";
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
@@ -25,6 +27,7 @@ public class MessageService extends WearableListenerService {
             return;
         }
         showToast(msg);
+        Log.d(TAG, "tweet");
         tweet(msg);
         /*
         sleep(300000);
