@@ -2,18 +2,23 @@ package com.example.hashimotomika.tweetforwear;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.wearable.view.WatchViewStub;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
+import android.widget.AnalogClock;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextClock;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -23,10 +28,15 @@ import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Handler;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.LogRecord;
 
 public class MainActivity extends Activity implements SensorEventListener{
@@ -54,8 +64,8 @@ public class MainActivity extends Activity implements SensorEventListener{
         setupGoogleApiClient();
         cntTouch = 0;
 
-        Button button = (Button) findViewById(R.id.tweet);
-        button.setOnTouchListener(new View.OnTouchListener() {
+        AnalogClock textClock = (AnalogClock) findViewById(R.id.AnalogClock);
+        textClock.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 String action = "";
@@ -173,9 +183,11 @@ public class MainActivity extends Activity implements SensorEventListener{
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+
         if(event.sensor.getType() != Sensor.TYPE_ACCELEROMETER) {
             return;
         }
+
         long now = System.currentTimeMillis();
         if ((now - mLastForce) > SHAKE_TIMEOUT) {
             mShakeCount = 0;
