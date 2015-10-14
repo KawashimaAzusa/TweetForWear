@@ -31,14 +31,12 @@ public class MainActivity extends Activity implements SensorEventListener{
     private static final int FORCE_THRESHOLD = 0;
     private static final int TIME_THRESHOLD = 100;
     private static final int SHAKE_TIMEOUT = 500;
-    private static final int SHAKE_DURATION = 100;
     private static final int SHAKE_COUNT = 3;
 
     private SensorManager sensorManager;
     private float lastX = -1.0f, lastY = -1.0f, lastZ = -1.0f;
     private int mShakeCount = 0;
     private long mLastForce;
-    private long mLastShake;
     private long mLastTime;
 
     @Override
@@ -183,8 +181,7 @@ public class MainActivity extends Activity implements SensorEventListener{
             Log.d("Speed:", String.valueOf(speed));
 
             if (speed > FORCE_THRESHOLD) {
-                if ((++mShakeCount >= SHAKE_COUNT) && (now - mLastShake > SHAKE_DURATION)) {
-                    mLastShake = now;
+                if (++mShakeCount >= SHAKE_COUNT) {
                     mShakeCount = 0;
                     sendMessage("SHAKE: " + makeInputText());
                 }

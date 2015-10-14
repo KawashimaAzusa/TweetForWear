@@ -15,24 +15,31 @@ import twitter4j.TwitterException;
 public class MessageService extends WearableListenerService {
 
     private Twitter mTwitter;
+    private static final int SHAKE_DURATION = 60000;
+    private long mLastTweet;
+
     private String TAG = "Handler";
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        String msg;
-        mTwitter = TwitterUtils.getTwitterInstance(this);
-        try {
-            msg = new String(messageEvent.getData(), "UTF-8");
-        } catch (Exception e) {
-            return;
+        long now = System.currentTimeMillis();
+        if (now - mLastTweet > SHAKE_DURATION) {
+            String msg;
+            mTwitter = TwitterUtils.getTwitterInstance(this);
+            try {
+                msg = new String(messageEvent.getData(), "UTF-8");
+            } catch (Exception e) {
+                return;
+            }
+            showToast(msg);
+            Log.d(TAG, "tweet");
+            tweet(msg);
+            /*
+            sleep(300000);
+            CallRequest.sendCallRequest(this);
+            */
+            mLastTweet = now;
         }
-        showToast(msg);
-        Log.d(TAG, "tweet");
-        tweet(msg);
-        /*
-        sleep(300000);
-        CallRequest.sendCallRequest(this);
-        */
     }
 
     /**
