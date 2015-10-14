@@ -6,15 +6,6 @@
     android:weightSum="1"
     android:background="#ff5c8cff">
 
-<!--
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/tweet"
-        android:id="@+id/tweet"
-        android:layout_gravity="center"
-        android:background="#ffff9bbe" />
--->
 
     <AnalogClock
         android:layout_width="match_parent"

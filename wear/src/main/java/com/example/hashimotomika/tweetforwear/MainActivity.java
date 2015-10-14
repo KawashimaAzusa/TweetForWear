@@ -64,8 +64,8 @@ public class MainActivity extends Activity implements SensorEventListener{
         setupGoogleApiClient();
         cntTouch = 0;
 
-        AnalogClock textClock = (AnalogClock) findViewById(R.id.AnalogClock);
-        textClock.setOnTouchListener(new OnTouchListener() {
+        AnalogClock analogClock = (AnalogClock) findViewById(R.id.AnalogClock);
+        analogClock.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 String action = "";
@@ -183,11 +183,9 @@ public class MainActivity extends Activity implements SensorEventListener{
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-
         if(event.sensor.getType() != Sensor.TYPE_ACCELEROMETER) {
             return;
         }
-
         long now = System.currentTimeMillis();
         if ((now - mLastForce) > SHAKE_TIMEOUT) {
             mShakeCount = 0;
