@@ -5,7 +5,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.wearable.MessageEvent;
-import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
 import twitter4j.Twitter;
@@ -15,7 +14,8 @@ import twitter4j.TwitterException;
 public class MessageService extends WearableListenerService {
 
     private Twitter mTwitter;
-    private static final int SHAKE_DURATION = 60000;
+
+    private static final int TWEET_DURATION = 60000;
     private long mLastTweet;
 
     private String TAG = "Handler";
@@ -23,7 +23,7 @@ public class MessageService extends WearableListenerService {
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         long now = System.currentTimeMillis();
-        if (now - mLastTweet > SHAKE_DURATION) {
+        if (now - mLastTweet > TWEET_DURATION) {
             String msg;
             mTwitter = TwitterUtils.getTwitterInstance(this);
             try {
