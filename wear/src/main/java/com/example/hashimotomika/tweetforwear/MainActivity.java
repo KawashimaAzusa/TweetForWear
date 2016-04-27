@@ -31,9 +31,11 @@ public class MainActivity extends Activity implements SensorEventListener{
     private SensorManager sensorManager;
     private long mFirstTouch = 0;
     private long MIN_COVERED_DURATION = 3000;
-    private long MAX_COVERED_DURATION = 4000;
+    private long MAX_COVERED_DURATION = 6000;
     private int LIGHT_INTENSITY = 20;
+    private String TAG_WEAR = "WEAR";
 
+    private String str;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +52,7 @@ public class MainActivity extends Activity implements SensorEventListener{
                     case MotionEvent.ACTION_DOWN:
                         cntTouch++;
                         if (cntTouch == 2) {
+                            Log.d("TOUCH: ", "success");
                             sendMessage("TOUCH: " + makeInputText());
                             cntTouch = 0;
                         }
@@ -65,7 +68,7 @@ public class MainActivity extends Activity implements SensorEventListener{
                         action = "ACTION_MOVE";
                         break;
                 }
-                Log.d("MotionEvent", "action = " + action + ", (" + event.getX() + ", " + event.getY() + ")");
+                //Log.d("MotionEvent", "action = " + action + ", (" + event.getX() + ", " + event.getY() + ")");
                 return false;
             }
         });
@@ -117,6 +120,7 @@ public class MainActivity extends Activity implements SensorEventListener{
      */
     private void sendMessage(String message) {
         if (message == null) return;
+        Log.d("message", "sendMessage");
         new AsyncTask<String, Void, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -151,29 +155,21 @@ public class MainActivity extends Activity implements SensorEventListener{
     @Override
     protected void onResume() {
         super.onResume();
-        List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_LIGHT);
+        List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_HEART_RATE);
         if (sensors.size() > 0) {
             Sensor s = sensors.get(0);
             sensorManager.registerListener(this, s, SensorManager.SENSOR_DELAY_UI);
         }
+
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        long now = System.currentTimeMillis();
-        float light = event.values[0];
-        Log.d("LIGHT", String.valueOf(light));
-        if (light > LIGHT_INTENSITY) {
-            long duration = now - mFirstTouch;
-            if ((duration >= MIN_COVERED_DURATION) && (duration <= MAX_COVERED_DURATION)) {
-                sendMessage("SHAKE: " + makeInputText());
-            }
-            mFirstTouch = 0;
-        } else {
-            if (mFirstTouch == 0) {
-                mFirstTouch = now;
-            }
+        if (event.sensor.getType() == Sensor.TYPE_HEART_RATE) {
+            float heartRate = event.values[0];
+            Log.d(TAG_WEAR, "heat rate: " + heartRate);
         }
+
     }
 
     @Override

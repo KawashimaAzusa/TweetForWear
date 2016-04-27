@@ -8,16 +8,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class EditPhoneNumberActivity extends Activity {
+public class EditSettingsActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_phone_number);
+        setContentView(R.layout.activity_edit_settings);
         Button button = (Button) findViewById(R.id.submit_phone_number);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
