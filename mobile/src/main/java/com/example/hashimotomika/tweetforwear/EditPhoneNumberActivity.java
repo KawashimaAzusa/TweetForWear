@@ -28,7 +28,7 @@ public class EditPhoneNumberActivity extends Activity {
                 if (phoneNumber != "") {
                     setPhoneNumber(phoneNumber);
                 } else {
-                    showMessage("input phone number");
+                    showMessage("input phones number");
                 }
             }
         });
